@@ -1,4 +1,4 @@
-package com.syndicate.syndicate;
+package com.syndicate;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
