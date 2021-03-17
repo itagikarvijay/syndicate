@@ -53,8 +53,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
-		http.authorizeRequests().antMatchers("/api/user/find").permitAll();
-		http.authorizeRequests().antMatchers("/api/login").permitAll();
+		http.authorizeRequests().antMatchers("/api/v1/login/find").permitAll();
+		http.authorizeRequests().antMatchers("/api/v1/login").permitAll();
 		http.authorizeRequests().anyRequest().authenticated();
 //		Java-Jwt Implementation
 		http.addFilterBefore(new JWTAuthenticationFilter(authenticationManagerBean()),

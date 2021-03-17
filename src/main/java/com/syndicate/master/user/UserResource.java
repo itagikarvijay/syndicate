@@ -17,23 +17,25 @@ import org.springframework.web.bind.annotation.RestController;
  *
  */
 @RestController
-@RequestMapping("/api/user")
-public class UserController {
-	
+@RequestMapping("/api/v1/user")
+public class UserResource {
+
 	@Autowired
 	IUserService userService;
 
 	@Autowired
 	IUserRepo userRepo;
-	
+
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_ROOT')")
 	@PostMapping("/register")
-	public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO){
+	public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
 		try {
 			userService.saveOne(userDTO);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return new ResponseEntity<>("User Created", HttpStatus.CREATED);
+//		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(1).toUri();
+//		return ResponseEntity.created(location).build();
 	}
 }

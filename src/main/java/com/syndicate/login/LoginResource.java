@@ -13,10 +13,10 @@ import com.syndicate.master.user.IUserService;
 import com.syndicate.master.user.UserDTO;
 
 @RestController
-@RequestMapping("/api")
-public class LoginController {
+@RequestMapping("/api/v1/login")
+public class LoginResource {
 
-	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+	private static final Logger logger = LoggerFactory.getLogger(LoginResource.class);
 
 	@Autowired
 	IUserService userService;
@@ -24,19 +24,21 @@ public class LoginController {
 	@Autowired
 	LoginUtil loginUtil;
 
-	@PostMapping("/user/find")
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody UserDTO user) {		
+	@PostMapping("/find")
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody UserDTO user) {
 		logger.debug("UserController - User name " + user.getName());
-		UserDTO ud = null;
-		ud = userService.findOne(user.getName().trim());
-		if (ud != null) {
-			if (loginUtil.comparePassword(user.getPassword(), ud.getPassword())) {
-				return ResponseEntity.ok(Boolean.TRUE);
-			} else {
-				return ResponseEntity.ok("User name or password is incorrect.!");
-			}
-		} else {
-			return ResponseEntity.ok("User not found.!");
+		UserDTO ud = userService.findOne(user.getName().trim());
+		if (ud == null) {
+			ud = new UserDTO();
+			ud.setLogin_failuer_message("User not found.!");
+			return ResponseEntity.ok(ud);
 		}
+		boolean val = loginUtil.comparePassword(user.getPassword(), ud.getPassword());
+		ud.setPassword("");
+		if (val)
+			ud.setFound(Boolean.TRUE);
+		else
+			ud.setLogin_failuer_message("User name or password is incorrect.!");
+		return ResponseEntity.ok(ud);
 	}
 }

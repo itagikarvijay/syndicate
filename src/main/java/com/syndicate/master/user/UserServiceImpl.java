@@ -5,8 +5,10 @@ package com.syndicate.master.user;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,6 +23,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.syndicate.login.LoginUtil;
+import com.syndicate.master.role.IRoleRepo;
+import com.syndicate.master.role.Role;
 
 /**
  * @author User
@@ -28,27 +32,30 @@ import com.syndicate.login.LoginUtil;
  */
 @Service
 public class UserServiceImpl implements IUserService {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
 	@Autowired
 	IUserRepo userRepo;
 
 	@Autowired
+	IRoleRepo roleRepo;
+
+	@Autowired
 	private ModelMapper modelMapper;
 
 	@Autowired
 	LoginUtil loginUtil;
-	
+
 	@Autowired
 	HttpServletRequest req;
-	
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		logger.debug("User name " + username);
 
 		Optional<User> user = userRepo.findByName(username);
-		
+
 		if (user.get() == null) {
 			throw new UsernameNotFoundException(username);
 		}
@@ -60,7 +67,7 @@ public class UserServiceImpl implements IUserService {
 	private Collection<? extends GrantedAuthority> addRole(Optional<User> user) {
 		List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
 		user.get().getRoles().forEach(r -> {
-			SimpleGrantedAuthority s = new SimpleGrantedAuthority("ROLE_"+r.getRole());
+			SimpleGrantedAuthority s = new SimpleGrantedAuthority("ROLE_" + r.getRole());
 			list.add(s);
 		});
 		req.getSession().setAttribute("roles", list);
@@ -78,8 +85,14 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public String saveOne(UserDTO userDTO) throws Exception {
+		Set<Role> selectedRoles = new HashSet<Role>();
 		User user = modelMapper.map(userDTO, User.class);
 		user.setPassword(loginUtil.hashPassword(userDTO.getPassword()));
+		userDTO.getRoles().stream().forEach(s -> {
+			Optional<Role> r = roleRepo.findById(Long.valueOf(s));
+			selectedRoles.add(r.get());
+		});
+		user.setRoles(selectedRoles);
 		userRepo.save(user);
 		return "User created.!";
 	}

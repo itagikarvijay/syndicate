@@ -17,7 +17,7 @@ import com.syndicate.master.user.UserDTO;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-public class WelcomeCtrl {
+public class WelcomeResource {
 	
 	
 
