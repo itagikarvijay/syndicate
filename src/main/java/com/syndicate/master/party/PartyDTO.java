@@ -2,6 +2,8 @@ package com.syndicate.master.party;
 
 import java.time.LocalDate;
 
+import com.syndicate.master.all.categories.CategoryDTO;
+
 import lombok.Data;
 
 @Data
@@ -23,4 +25,5 @@ public class PartyDTO {
 	private String createByUser;
 	private String updatedByUser;
 	private boolean inactive;
+	private CategoryDTO partyType;
 }

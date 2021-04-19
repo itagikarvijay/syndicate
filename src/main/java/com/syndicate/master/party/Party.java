@@ -3,7 +3,6 @@ package com.syndicate.master.party;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.syndicate.master.all.categories.Category;
 import com.syndicate.master.state.StateGST;
 
 import lombok.AllArgsConstructor;
@@ -72,9 +72,13 @@ public class Party implements Serializable {
 	@Column(name = "inactive")
 	private boolean inactive;
 
-	@OneToOne(cascade = CascadeType.ALL)
+//	@OneToOne
+//	@JoinColumn(name = "party_type_id", referencedColumnName = "id", insertable = false, updatable = false)
+//	private PartyType partyType;
+	
+	@OneToOne
 	@JoinColumn(name = "party_type_id", referencedColumnName = "id", insertable = false, updatable = false)
-	private PartyType partyType;
+	private Category partyType;
 
 	@OneToOne
 	@JoinColumn(name = "state_id", referencedColumnName = "id", insertable = false, updatable = false)

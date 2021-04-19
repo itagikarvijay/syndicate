@@ -18,17 +18,17 @@ public class PartyServiceImpl implements IPartyService {
 
 	@Autowired
 	ConvertToDto convertToDto;
-	
+
 	@Autowired
 	ConvertToEntity convertToEntity;
 
 	@Override
 	public PartyDTO findByGstNo(String gstNo) {
-		
+
 		Optional<Party> p = partyRepo.findByGstNo(gstNo);
-		if(p.isEmpty())
+		if (p.isEmpty())
 			throw new NotFoundException("Party Not Found.!");
-		
+
 		return convertToDto.mapList(p.get(), PartyDTO.class);
 	}
 
