@@ -26,4 +26,14 @@ public class CategoryResource {
 		return new ResponseEntity<>(categoryService.findAll(category, CategoryDTO.class), HttpStatus.OK);
 	}
 
+	@RequestMapping("/uom")
+	public ResponseEntity<List<CategoryDTO>> uomCategory(@RequestParam("category") String category) {
+		return new ResponseEntity<>(categoryService.findAll(category, CategoryDTO.class), HttpStatus.OK);
+	}
+	
+	@RequestMapping("/department")
+	public ResponseEntity<List<CategoryDTO>> departmentTypes(@RequestParam("category") String category) {
+		return new ResponseEntity<>(categoryService.findAll(category, CategoryDTO.class), HttpStatus.OK);
+	}
+
 }

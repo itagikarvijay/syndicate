@@ -1,17 +1,22 @@
 package com.syndicate.master.product;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.syndicate.master.all.categories.Category;
+import com.syndicate.tran.voucher.ProductStock;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -52,12 +57,26 @@ public class Product implements Serializable {
 	private Boolean inactive;
 	@Column(name = "isDeleted")
 	private Boolean isDeleted;
-	
-	@OneToOne
-	@JoinColumn(name = "product_id", referencedColumnName = "product_id")
-	private ProductRates productRates;
+	@Column(name = "uom")
+	private Long uom;
+	@Lob
+	@Column(name = "image", columnDefinition = "BLOB")
+	private String image;
+
+	@OneToMany
+	@JoinColumn(name = "product_id", insertable = false, updatable = false)
+	private List<ProductRates> productRates;
 
 	@OneToOne
 	@JoinColumn(name = "prod_category_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private Category productCategory;
+
+	@OneToOne
+	@JoinColumn(name = "uom", referencedColumnName = "id", insertable = false, updatable = false)
+	private Category uomCategory;
+
+//	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "prod_id")
+	private List<ProductStock> productStock;
 }

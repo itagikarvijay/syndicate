@@ -7,20 +7,25 @@ import org.springframework.stereotype.Service;
 
 import com.syndicate.conversion.utility.ConvertToDto;
 import com.syndicate.exception.NotFoundException;
-import com.syndicate.master.product.IProductCategoryRepo;
 
 @Service
 public class CategoryServiceImpl<T> implements ICategoryService<T> {
 
 	@Autowired
-	IPartyTypeRepo partyTypeRepo;
+	PartyTypeRepo partyTypeRepo;
 
 	@Autowired
-	IProductCategoryRepo productCategoryRepo;
+	ProductCategoryRepo productCategoryRepo;
 
 	@Autowired
-	IProductCategoryRepo productCategory;
+	ProductCategoryRepo productCategory;
+	
+	@Autowired
+	UomCategoryRepo uomCategoryRepo;
 
+	@Autowired
+	DepartmentRepo departmentRepo;
+	
 	@Autowired
 	ConvertToDto convertToDto;
 
@@ -34,6 +39,12 @@ public class CategoryServiceImpl<T> implements ICategoryService<T> {
 			break;
 		case "PRODUCT_CATEGORY":
 			list = (List<T>) productCategoryRepo.findAll();
+			break;	
+		case "UOM_CATEGORY":
+			list = (List<T>) uomCategoryRepo.findAll();
+			break;
+		case "DEPT_TYPE":
+			list = (List<T>) departmentRepo.findAll();
 			break;			
 		default:
 			break;

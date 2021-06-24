@@ -16,9 +16,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.syndicate.master.role.Role;
+import com.syndicate.master.store.Store;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,7 +36,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Table(name = "user") //, uniqueConstraints = { @UniqueConstraint(columnNames = "id") })
+@Table(name = "user") // , uniqueConstraints = { @UniqueConstraint(columnNames = "id") })
 public class User implements Serializable {
 
 	/**
@@ -46,17 +48,21 @@ public class User implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Integer id;
-
 	@Column(name = "name")
 	private String name;
-
 	@Column(name = "password")
 	private String password;
+	@Column(name = "store_id")
+	private Long storeId;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role", joinColumns = {
 			@JoinColumn(name = "user", referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(name = "role", referencedColumnName = "id") })
 	private Set<Role> roles;
+	
+	@OneToOne
+	@JoinColumn(name = "store_id", referencedColumnName = "id", insertable = false, updatable = false)
+	private Store store;
 
-	}
+}

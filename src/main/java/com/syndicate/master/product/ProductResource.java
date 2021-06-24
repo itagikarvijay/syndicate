@@ -1,5 +1,6 @@
 package com.syndicate.master.product;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,6 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.syndicate.conversion.utility.CsvReader;
+import com.syndicate.conversion.utility.CsvReaderResponse;
+import com.syndicate.conversion.utility.WrapperClz;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -29,12 +35,11 @@ public class ProductResource {
 	}
 
 	@GetMapping("/findAll")
-	public ResponseEntity<List<ProductDTO>> findAll() {
-		Optional<List<ProductDTO>> productList = iProductService.findAll();
+	public ResponseEntity<List<ProductDTO>> findAll(@RequestParam("storeId") Long storeId) {
+		Optional<List<ProductDTO>> productList = iProductService.findAll(storeId);
 		return new ResponseEntity<List<ProductDTO>>(productList.get(), HttpStatus.OK);
 	}
-	
-	
+
 	@GetMapping("/searchProductCount")
 	public Long findAll(@RequestParam("search") String search) {
 		return iProductService.searchProductCount(search);
@@ -50,19 +55,46 @@ public class ProductResource {
 	}
 
 	@GetMapping("/searchAllWithPagination")
-	public ResponseEntity<Map<String,Object>> findAll(@RequestParam("search") String search,
-			@RequestParam("page") String paramPage, @RequestParam("pageSize") String paramPageSize, @RequestParam("totalRecords") String paramTotalRecords) {
+	public ResponseEntity<Map<String, Object>> findAll(@RequestParam("search") String search,
+			@RequestParam("page") String paramPage, @RequestParam("pageSize") String paramPageSize,
+			@RequestParam("totalRecords") String paramTotalRecords) {
 		int page = Integer.valueOf(paramPage);
 		int pageSize = Integer.valueOf(paramPageSize);
 		int totalRecords = Integer.valueOf(paramTotalRecords);
 		Map<String, Object> productList = iProductService.findAll(search, page, pageSize, totalRecords);
-		return new ResponseEntity<Map<String,Object>>(productList, HttpStatus.OK);
+		return new ResponseEntity<Map<String, Object>>(productList, HttpStatus.OK);
 	}
 
 	@PutMapping("/update")
 	public ResponseEntity<ProductDTO> update(@RequestBody ProductDTO product) {
 		Optional<ProductDTO> productOPT = iProductService.update(product);
 		return new ResponseEntity<ProductDTO>(productOPT.get(), HttpStatus.OK);
+	}
+	
+	@PutMapping("/update/upload")
+	public ResponseEntity<Long> update(@RequestBody WrapperClz list) {		System.out.println("productList " +list.getSuccessList().size());
+		System.out.println("productList " +list.getSuccessList());
+		
+		iProductService.update(list.getSuccessList());
+		return new ResponseEntity<Long>(100l, HttpStatus.OK);
+	}
+
+	@PutMapping("/upload")
+	public ResponseEntity<CsvReaderResponse> update(@RequestParam("file") MultipartFile file) {
+		System.out.println("uploading product file.! " + file.getOriginalFilename());
+		try {
+			CsvReaderResponse csvReaderResponse = CsvReader.csvToProducts(file.getInputStream());
+			return new ResponseEntity<CsvReaderResponse>(csvReaderResponse, HttpStatus.OK);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<CsvReaderResponse>(new CsvReaderResponse(), HttpStatus.OK);
+	}
+
+	@PutMapping("/update/rate")
+	public ResponseEntity<ProductRatesDTO> updateRate(@RequestBody ProductRatesDTO productRateDTO) {
+		Optional<ProductRatesDTO> productOPT = iProductService.update(productRateDTO);
+		return new ResponseEntity<ProductRatesDTO>(productOPT.get(), HttpStatus.OK);
 	}
 
 	@PatchMapping(path = "/delete", consumes = "application/json-patch+json")

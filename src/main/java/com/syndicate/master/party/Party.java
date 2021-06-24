@@ -2,18 +2,23 @@ package com.syndicate.master.party;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.syndicate.master.all.categories.Category;
-import com.syndicate.master.state.StateGST;
+import com.syndicate.master.state.StateGst;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -71,17 +76,19 @@ public class Party implements Serializable {
 	private String updatedByUser;
 	@Column(name = "inactive")
 	private boolean inactive;
+//	@Column(name = "isDeleted")
+//	private boolean isDeleted;	
 
-//	@OneToOne
-//	@JoinColumn(name = "party_type_id", referencedColumnName = "id", insertable = false, updatable = false)
-//	private PartyType partyType;
-	
 	@OneToOne
 	@JoinColumn(name = "party_type_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private Category partyType;
 
 	@OneToOne
 	@JoinColumn(name = "state_id", referencedColumnName = "id", insertable = false, updatable = false)
-	private StateGST stateGst;
-	
+	private StateGst stateGst;
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "party_id")	
+	List<ShippingAddress> shippingAddress;
+
 }

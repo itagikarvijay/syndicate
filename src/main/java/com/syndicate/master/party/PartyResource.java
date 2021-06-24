@@ -6,13 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.syndicate.exception.NotFoundException;
 
 @RestController
 @RequestMapping("/api/v1/party")
@@ -40,11 +39,21 @@ public class PartyResource {
 		}
 		return new ResponseEntity<List<PartyDTO>>(partyDTO, HttpStatus.OK);
 	}
+	
+	@GetMapping("/findAll/{partyTypeId}")
+	public ResponseEntity<List<PartyDTO>> findAll(@PathVariable Integer partyTypeId) {
+		List<PartyDTO> partyDTO = null;
+		try {
+			partyDTO = partyService.findAll(partyTypeId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<List<PartyDTO>>(partyDTO, HttpStatus.OK);
+	}
 
 	@PutMapping("/save")
 	public ResponseEntity<PartyDTO> save(@RequestBody PartyDTO partyDTO) {
 		System.out.println(partyDTO);
-		partyDTO.setStateId(29);
 		return ResponseEntity.ok().body(partyService.update(partyDTO));
 	}
 

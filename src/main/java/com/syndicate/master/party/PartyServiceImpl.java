@@ -1,5 +1,6 @@
 package com.syndicate.master.party;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,11 +25,9 @@ public class PartyServiceImpl implements IPartyService {
 
 	@Override
 	public PartyDTO findByGstNo(String gstNo) {
-
 		Optional<Party> p = partyRepo.findByGstNo(gstNo);
-		if (p.isEmpty())
+		if (p.isPresent())
 			throw new NotFoundException("Party Not Found.!");
-
 		return convertToDto.mapList(p.get(), PartyDTO.class);
 	}
 
@@ -39,8 +38,18 @@ public class PartyServiceImpl implements IPartyService {
 
 	@Override
 	public PartyDTO update(PartyDTO partyDTO) {
-		Party p = partyRepo.save(convertToEntity.map(partyDTO, Party.class));
+		List<ShippingAddress> lst = new ArrayList<ShippingAddress>();
+		Party p = convertToEntity.map(partyDTO, Party.class);
+		ShippingAddress sa = convertToEntity.map(partyDTO.getShippingAddress().get(0), ShippingAddress.class);
+		lst.add(sa);
+		p.setShippingAddress(lst);
+		p = partyRepo.save(p);
 		return convertToDto.mapList(p, PartyDTO.class);
+	}
+
+	@Override
+	public List<PartyDTO> findAll(Integer partyTypeId) {
+		return convertToDto.mapList(partyRepo.findAllByPartyTypeId(partyTypeId), PartyDTO.class);
 	}
 
 }

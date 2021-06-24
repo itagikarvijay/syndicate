@@ -13,4 +13,5 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
 	@Query("FROM com.syndicate.master.product.Product p WHERE p.name LIKE %:search% ")
 	Optional<List<Product>> findAll(String search);
 
+	Optional<Product> findByHsnCode(String hsnCode);
 }

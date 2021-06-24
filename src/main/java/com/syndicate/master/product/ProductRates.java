@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "product_rates")
+@Table(name = "product_rates_taxes")
 public class ProductRates implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -31,7 +31,14 @@ public class ProductRates implements Serializable {
 	private Long productId;
 	@Column(name="rate")
 	private float rate;
+	@Column(name = "gst_percent", nullable = false)
+	private float gst;
+	@Column(name = "cgst_percent", nullable = false)
+	private float cgst;
+	@Column(name = "sgst_percent", nullable = false)
+	private float sgst;	
 	@Column(name="wef_date")
 	private LocalDate wef;
-
+	@Column(name="store_id")
+	private Long storeId;
 }

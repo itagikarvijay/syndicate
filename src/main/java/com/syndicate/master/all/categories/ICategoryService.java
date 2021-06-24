@@ -5,5 +5,7 @@ import java.util.List;
 public interface ICategoryService<T> {
 
 	List<T> findAll(String name, Class<?> T);
+	
+
 
 }
