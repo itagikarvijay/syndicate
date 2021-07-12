@@ -8,5 +8,6 @@ import lombok.Data;
 
 @Data
 public class WrapperClz {
+	private Long storeId;
 	private List<UploadProductDTO> successList;
 }

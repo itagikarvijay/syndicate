@@ -25,6 +25,9 @@ public class CategoryServiceImpl<T> implements ICategoryService<T> {
 
 	@Autowired
 	DepartmentRepo departmentRepo;
+
+	@Autowired
+	CategoryRepo categoryRepo;
 	
 	@Autowired
 	ConvertToDto convertToDto;
@@ -47,11 +50,21 @@ public class CategoryServiceImpl<T> implements ICategoryService<T> {
 			list = (List<T>) departmentRepo.findAll();
 			break;			
 		default:
+//			System.out.println("All categories");
+			list = (List<T>) categoryRepo.findAll();
 			break;
 		}
 		if (list.isEmpty())
 			throw new NotFoundException("List is empty.!");
 		return (List<T>) convertToDto.mapList(list, clazzDTO);
 	}
+
+	@Override
+	public Long save(Category c) {
+		Category savedCategory = categoryRepo.save(c);
+		return savedCategory.getId();
+	}
+
+
 
 }

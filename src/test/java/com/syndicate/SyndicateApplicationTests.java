@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -22,9 +23,10 @@ class SyndicateApplicationTests {
 	@LocalServerPort
 	private int port;
 
-	TestRestTemplate restTemplate = new TestRestTemplate();
+	@Autowired
+	TestRestTemplate restTemplate; // = new TestRestTemplate();
 	
-	private String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290IiwiZXhwIjoxNjE1MTI3Mzg5fQ.OEYIaS7eSs3C2qykPaH2AGBsvQdoxRFL8IaHpnJWAJxVGfZpaAJ4Ou9EYROL6dA0nxxikhuUrnrkDFOVGtOckw";
+	private String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb290IiwiZXhwIjoxNjIyMDA4NDU0fQ.0dCZhEl7bq8wj3Lmw_ukSeomxgzn3CcyOqfpc3O5Vd5tCM3f7HZh8nOFzSK9tRhcKnwgrEYF1snTVRKFqtTXGw";
 
 	@Test
 	public void testSaveUSer() throws Exception {

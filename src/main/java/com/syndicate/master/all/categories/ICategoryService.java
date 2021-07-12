@@ -7,5 +7,6 @@ public interface ICategoryService<T> {
 	List<T> findAll(String name, Class<?> T);
 	
 
+	Long save(Category c);
 
 }

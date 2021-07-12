@@ -1,9 +1,16 @@
 package com.syndicate.master.product;
 
 import java.io.IOException;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,9 +25,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.syndicate.Task;
 import com.syndicate.conversion.utility.CsvReader;
 import com.syndicate.conversion.utility.CsvReaderResponse;
 import com.syndicate.conversion.utility.WrapperClz;
+import com.syndicate.executors.ExecuteTask;
+import com.syndicate.executors.ExecutorClzz;
 
 @RestController
 @RequestMapping("/api/v1/product")
@@ -28,6 +38,9 @@ public class ProductResource {
 
 	@Autowired
 	IProductService iProductService;
+
+	@Autowired
+	ExecutorClzz executorsClzz;
 
 	@PostMapping("/save")
 	public String save(@RequestBody ProductDTO productDTO) {
@@ -70,18 +83,54 @@ public class ProductResource {
 		Optional<ProductDTO> productOPT = iProductService.update(product);
 		return new ResponseEntity<ProductDTO>(productOPT.get(), HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/update/upload")
-	public ResponseEntity<Long> update(@RequestBody WrapperClz list) {		System.out.println("productList " +list.getSuccessList().size());
-		System.out.println("productList " +list.getSuccessList());
+	public ResponseEntity<Long> update(@RequestBody WrapperClz list) {
+//		System.out.println("productList " +list.getSuccessList().size());
+//		System.out.println("productList " +list.getSuccessList());
+//		System.out.println("storeId " +list.getStoreId());
+		int startTime = LocalTime.now().getMinute();
+		System.out.print("Start : " + startTime);
+//		iProductService.update(list);
+
+//		ExecutorService executor = Executors.newFixedThreadPool(4);
+//		ThreadPoolExecutor pool = (ThreadPoolExecutor) executor;
+//		ExecuteTask et = new ExecuteTask(iProductService);
+//		et.setList(list);
+//		Future<?> f = pool.submit(et);
+//		System.out.println("is terminated " +f.isDone());
+//		while (!f.isDone()) {		
+//		}
+//		int endTime = LocalTime.now().getMinute();
+//		executor.shutdown();
 		
-		iProductService.update(list.getSuccessList());
+		System.out.println("Available proc\t"+Runtime.getRuntime().availableProcessors());
+		ForkJoinPool p = new ForkJoinPool(); //.commonPool();
+		
+		Task t = new Task(list.getSuccessList(),false,iProductService);
+
+		p.execute(t);
+
+		while (!t.isDone()) {}
+
+		p.shutdown();
+
+		if (p.isTerminated()) {
+			System.out.println("Completed normaly.!");
+		}
+
+		int endTime = LocalTime.now().getMinute();
+		System.out.println("end : " + endTime);
+		System.out.println("Total Time Taken in minutes : " + (endTime - startTime));
+	
 		return new ResponseEntity<Long>(100l, HttpStatus.OK);
+
 	}
 
 	@PutMapping("/upload")
 	public ResponseEntity<CsvReaderResponse> update(@RequestParam("file") MultipartFile file) {
 		System.out.println("uploading product file.! " + file.getOriginalFilename());
+
 		try {
 			CsvReaderResponse csvReaderResponse = CsvReader.csvToProducts(file.getInputStream());
 			return new ResponseEntity<CsvReaderResponse>(csvReaderResponse, HttpStatus.OK);

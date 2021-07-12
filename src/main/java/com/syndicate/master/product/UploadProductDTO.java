@@ -1,16 +1,14 @@
 package com.syndicate.master.product;
 
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
 import com.syndicate.BaseDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class UploadProductDTO extends BaseDTO {

@@ -36,5 +36,5 @@ public class ProductStock implements Serializable {
 	@Column(name = "prod_id")
 	private Long prodId;
 	@Column(name = "clo_stock")
-	private Float cloStock;
+	private float cloStock;
 }

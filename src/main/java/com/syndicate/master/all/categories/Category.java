@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "category")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)  
-@DiscriminatorColumn(name = "CATEGORY_TYPE")
+@DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING,name = "CATEGORY_TYPE")
 public class Category implements Serializable {
 
 	/**
