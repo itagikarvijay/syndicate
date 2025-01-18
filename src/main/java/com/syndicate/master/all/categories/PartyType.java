@@ -2,8 +2,8 @@ package com.syndicate.master.all.categories;
 
 import java.io.Serializable;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("PARTY_TYPE")

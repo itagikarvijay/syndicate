@@ -27,7 +27,7 @@ public class CsvReader {
 
 		try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 				CSVParser csvParser = new CSVParser(fileReader,
-						CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
+						CSVFormat.DEFAULT.withSkipHeaderRecord());) {
 
 			List<CSVRecord> csvReader = csvParser.getRecords();
 			for (CSVRecord h : csvReader) {

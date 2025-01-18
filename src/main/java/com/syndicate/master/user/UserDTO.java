@@ -23,12 +23,14 @@ public class UserDTO {
 	private String token;
 	private String user;
 	private Long storeId;
-	
+
 	private Set<String> roles;
-	
+
 	private boolean found = false;
-	
+
 	private String login_failuer_message;
-	private Store store;
-	
+//	private Store store;
+
+
+
 }

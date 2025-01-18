@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.syndicate.conversion.utility.ConvertToEntity;
 import com.syndicate.master.product.ProductRepo;
@@ -32,7 +32,7 @@ public class VoucherServiceImpl implements IVoucherService {
 	ConvertToEntity convertToEntity;
 
 	@Override
-	@Transactional(rollbackOn = Exception.class)
+	@Transactional(rollbackFor = Exception.class)
 	public Long sale(VoucherDTO voucherDTO) {
 		List<ProductStock> lst = new ArrayList<ProductStock>();
 		Voucher v = convertToEntity.map(voucherDTO, Voucher.class);
@@ -64,7 +64,7 @@ public class VoucherServiceImpl implements IVoucherService {
 	}
 
 	@Override
-	@Transactional(rollbackOn = Exception.class)
+	@Transactional(rollbackFor = Exception.class)
 	public Long purchase(VoucherDTO voucherDTO) {
 		List<ProductStock> lst = new ArrayList<ProductStock>();
 		Voucher v = convertToEntity.map(voucherDTO, Voucher.class);
@@ -95,7 +95,7 @@ public class VoucherServiceImpl implements IVoucherService {
 	}
 
 	@Override
-	@Transactional(rollbackOn = Exception.class)
+	@Transactional(rollbackFor = Exception.class)
 	public Long transfer(VoucherDTO voucherDTO) {
 		List<ProductStock> lst = new ArrayList<ProductStock>();
 		Voucher v = convertToEntity.map(voucherDTO, Voucher.class);
@@ -127,21 +127,21 @@ public class VoucherServiceImpl implements IVoucherService {
 	}
 
 	@Override
-	@Transactional(rollbackOn = Exception.class)
+	@Transactional(rollbackFor =  Exception.class)
 	public Long salesReturn(VoucherDTO voucherDTO) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	@Transactional(rollbackOn = Exception.class)
+	@Transactional(rollbackFor = Exception.class)
 	public Long purchaseReturn(VoucherDTO voucherDTO) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	@Transactional(rollbackOn = Exception.class)
+	@Transactional(rollbackFor =  Exception.class)
 	public Long issues(VoucherDTO voucherDTO) {
 		List<ProductStock> lst = new ArrayList<ProductStock>();
 		Voucher v = convertToEntity.map(voucherDTO, Voucher.class);
@@ -173,7 +173,7 @@ public class VoucherServiceImpl implements IVoucherService {
 	}
 
 	@Override
-	@Transactional(rollbackOn = Exception.class)
+	@Transactional(rollbackFor = Exception.class)
 	public Long scrap(VoucherDTO voucherDTO) {
 		// TODO Auto-generated method stub
 		return null;

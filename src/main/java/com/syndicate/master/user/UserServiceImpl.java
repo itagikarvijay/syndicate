@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,7 @@ public class UserServiceImpl implements IUserService {
 
 		Optional<User> user = userRepo.findByName(username);
 
-		if (user.get() == null) {
+		if (user.isEmpty()) {
 			throw new UsernameNotFoundException(username);
 		}
 

@@ -26,7 +26,7 @@ public class UserResource {
 	@Autowired
 	IUserRepo userRepo;
 
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_ROOT')")
+//	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_ROOT')")
 	@PostMapping("/register")
 	public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
 		try {

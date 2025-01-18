@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@EnableTransactionManagement
+//@EnableTransactionManagement
 public class SyndicateApplication implements CommandLineRunner {
 	
 	@Autowired

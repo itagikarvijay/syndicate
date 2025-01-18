@@ -6,10 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +20,11 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.syndicate.master.user.IUserRepo;
 import com.syndicate.master.user.User;
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
 	public static final String SECRET = "SECRET_KEY";
@@ -30,13 +32,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	public static final String TOKEN_PREFIX = "Bearer ";
 	public static final String HEADER_STRING = "Authorization";
 //	public static final String SIGN_UP_URL = "/api/services/controller/user";
-	
+
 	IUserRepo userRepo;
-	
+
 	public JWTAuthorizationFilter(AuthenticationManager authManager, IUserRepo userRepo) {
 		super(authManager);
 		this.userRepo = userRepo;
-		
+
 	}
 
 	@Override
@@ -50,7 +52,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 		}
 
 		UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
-		
+
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		chain.doFilter(req, res);
 	}

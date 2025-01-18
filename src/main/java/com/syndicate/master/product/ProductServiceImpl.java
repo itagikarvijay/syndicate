@@ -11,13 +11,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 
+import jakarta.persistence.criteria.Root;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -35,6 +30,12 @@ import com.syndicate.master.all.categories.Category;
 import com.syndicate.master.all.categories.CategoryDTO;
 import com.syndicate.master.all.categories.ICategoryService;
 import com.syndicate.tran.voucher.ProductStock;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductServiceImpl implements IProductService {
@@ -58,7 +59,7 @@ public class ProductServiceImpl implements IProductService {
 	ICategoryService<CategoryDTO> categoryService;
 
 	@Override
-	@Transactional(rollbackOn = { Exception.class })
+	@Transactional(rollbackFor = { Exception.class })
 	public String save(ProductDTO product) {
 		Product p = convertToEntity.map(product, Product.class);
 		p = productRepo.save(p);
@@ -116,7 +117,7 @@ public class ProductServiceImpl implements IProductService {
 	}
 
 	@Override
-	@Transactional(rollbackOn = { Exception.class })
+	@Transactional(rollbackFor =  { Exception.class })
 	public Optional<ProductDTO> update(ProductDTO productDTO) {
 		Product p = productRepo.save(convertToEntity.map(productDTO, Product.class));
 		return Optional.of(convertToDto.mapList(p, ProductDTO.class));
@@ -161,7 +162,7 @@ public class ProductServiceImpl implements IProductService {
 	}
 
 	@Override
-	@Transactional(rollbackOn = { Exception.class })
+	@Transactional(rollbackFor = { Exception.class })
 	public Optional<ProductRatesDTO> update(ProductRatesDTO productRate) {
 		ProductRates pr = new ProductRates();
 //		Optional<List<ProductRates>> prOpt = productRatesRepo

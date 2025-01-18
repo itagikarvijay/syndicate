@@ -4,21 +4,19 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
 import com.syndicate.master.all.categories.Category;
 import com.syndicate.master.state.StateGst;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,7 +41,7 @@ public class Party implements Serializable {
 	@Column(name = "id")
 	private Long id;
 	@Column(name = "party_type_id")
-	private Integer partyTypeId;
+	private Long partyTypeId;
 	@Column(name = "name")
 	private String name;
 	@Column(name = "email")
@@ -61,7 +59,7 @@ public class Party implements Serializable {
 	@Column(name = "gstin")
 	private String gstin;
 	@Column(name = "state_id")
-	private Integer stateId;
+	private Long stateId;
 	@Column(name = "start_date")
 	private LocalDate startDate;
 	@Column(name = "ob_amount")
