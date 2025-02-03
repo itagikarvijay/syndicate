@@ -22,6 +22,9 @@ import java.io.IOException;
 public class JwtAuthenticationFilterPerRequest extends OncePerRequestFilter {
     private final HandlerExceptionResolver handlerExceptionResolver;
 
+    /**
+    //Added for testing
+    **/
     @Autowired
     JwtGenerator jwtService;
 
